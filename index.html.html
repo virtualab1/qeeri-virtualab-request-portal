@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="QEERI VirtuaLab Request Portal for submitting virtual laboratory development requests." />
+  <title>QEERI VirtuaLab Request Portal</title>
+
+  <style>
+    :root {
+      --navy: #061a33;
+      --navy-2: #092746;
+      --blue: #0f4c81;
+      --blue-2: #1769aa;
+      --cyan: #10b9c8;
+      --teal: #0f766e;
+      --gold: #d6a437;
+      --bg: #f4f8fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --border: #d9e2ec;
+      --soft: #eef7fb;
+      --shadow: 0 12px 32px rgba(7, 27, 51, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .topbar {
+      background: rgba(6, 26, 51, 0.98);
+      color: white;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan), var(--blue));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #e8f5f8;
+      opacity: 0.92;
+    }
+
+    .nav-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .hero {
+      background:
+        radial-gradient(circle at 15% 25%, rgba(16,185,200,0.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(214,164,55,0.20), transparent 22%),
+        linear-gradient(135deg, var(--navy), var(--blue));
+      color: white;
+      padding: 74px 24px 96px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -100px -160px auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      border: 48px solid rgba(255,255,255,0.06);
+    }
+
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 34px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      margin-bottom: 18px;
+      color: #e9fbff;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(16,185,200,0.18);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2.1rem, 4vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      max-width: 760px;
+      font-size: 1.12rem;
+      color: #eaf6fb;
+      margin: 18px 0 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 14px;
+      padding: 13px 18px;
+      font-size: 0.96rem;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-primary {
+      background: white;
+      color: var(--blue);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    }
+
+    .button-secondary {
+      background: rgba(255,255,255,0.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .hero-panel {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 24px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.16);
+    }
+
+    .hero-panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.18rem;
+      color: #ffffff;
+    }
+
+    .hero-panel ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #eaf6fb;
+    }
+
+    .hero-panel li {
+      margin: 10px 0;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: -42px auto 56px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .notice {
+      background: white;
+      border-left: 6px solid var(--cyan);
+      padding: 20px 24px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .notice strong {
+      color: var(--blue);
+    }
+
+    .section {
+      margin: 28px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.55rem;
+    }
+
+    .section-head p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      max-width: 760px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      border: 1px solid rgba(217,226,236,0.72);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      color: var(--blue);
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #e7f7fa;
+      color: var(--teal);
+      font-weight: 800;
+      font-size: 0.78rem;
+      margin-bottom: 10px;
+    }
+
+    .workflow {
+      display: grid;
+      gap: 12px;
+    }
+
+    .workflow-step {
+      background: white;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px 20px;
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 14px;
+      align-items: start;
+      border: 1px solid rgba(217,226,236,0.72);
+    }
+
+    .workflow-number {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #e7f7fa, #d9f5fa);
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .workflow-step h3 {
+      margin: 0 0 4px;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .workflow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .submit-panel {
+      background: white;
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      border: 1px solid rgba(217,226,236,0.8);
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .submit-panel h2 {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 1.55rem;
+    }
+
+    .submit-panel p {
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .submit-box {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .submit-box h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+    }
+
+    .submit-box p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    .checklist {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .checklist li {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 9px;
+      color: #344054;
+      font-size: 0.94rem;
+    }
+
+    .check {
+      width: 20px;
+      height: 20px;
+      border-radius: 7px;
+      background: #e7f7fa;
+      color: var(--teal);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 0.72rem;
+    }
+
+    details {
+      background: white;
+      border-radius: 16px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 18px rgba(7, 27, 51, 0.06);
+    }
+
+    details + details {
+      margin-top: 10px;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    details p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    footer {
+      background: var(--navy);
+      color: #dbeef6;
+      text-align: center;
+      padding: 26px 20px;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 980px) {
+      .hero-inner,
+      .grid-3,
+      .grid-2,
+      .submit-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        font-size: 0.86rem;
+      }
+
+      .container {
+        margin-top: -34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">VL</div>
+      <div>QEERI VirtuaLab</div>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#governance">Governance</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#submit">Submit Request</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> QEERI internal initiative</div>
+        <h1>QEERI VirtuaLab Request Portal</h1>
+        <p>
+          Submit proposals to transform QEERI research projects, models, datasets, and decision-support tools into interactive virtual laboratories.
+        </p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=cqTcDnEL5kaWxwpowQ3JLhpgmNLYMUBNjTmkBgiRKGZUNzBJNlNaR1FXSDRITVhYWVc1RVFJVU9UTy4u" target="_blank" rel="noopener">Submit a Request</a>
+          <a class="button button-secondary" href="#governance">View Process</a>
+        </div>
+      </div>
+
+      <aside class="hero-panel">
+        <h2>What can be proposed?</h2>
+        <ul>
+          <li>Research-based simulation tools</li>
+          <li>Technology demonstration platforms</li>
+          <li>Decision-support dashboards</li>
+          <li>Educational and training virtual labs</li>
+          <li>Stakeholder-facing analysis tools</li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="notice" id="overview">
+      <strong>Purpose:</strong> This portal provides a structured pathway for QEERI centers to submit VirtuaLab development requests for review, prioritization, and implementation.
+    </section>
+
+    <section class="section" id="governance">
+      <div class="section-head">
+        <div>
+          <h2>Governance Principles</h2>
+          <p>The process is designed to support fair intake, clear review, and center-driven prioritization.</p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="card">
+          <span class="badge">Center priority</span>
+          <h3>Up to two priority VirtuaLabs</h3>
+          <p>Each QEERI center may nominate up to two high-value VirtuaLabs representing its most important projects, tools, or technologies.</p>
+        </article>
+
+        <article class="card">
+          <span class="badge">Readiness review</span>
+          <h3>Defined scope before development</h3>
+          <p>Requests are reviewed based on project maturity, available technical material, expected outputs, and required development effort.</p>
+        </article>
+
+        <article class="card">
+          <span class="badge">Transparent queue</span>
+          <h3>Prioritized implementation</h3>
+          <p>Requests are generally processed in submission order, with consideration for strategic value, readiness, and available resources.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Review Criteria</h2>
+          <p>Complete submissions should clearly explain the problem, proposed tool, available technical material, required features, and expected value.</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <article class="card">
+          <h3>Technical Readiness</h3>
+          <p>Availability of equations, models, datasets, code, Excel tools, reports, publications, figures, or prototype materials.</p>
+        </article>
+        <article class="card">
+          <h3>Expected Value</h3>
+          <p>Potential contribution to research visibility, education, grant support, stakeholder engagement, commercialization, or technology demonstration.</p>
+        </article>
+        <article class="card">
+          <h3>Development Clarity</h3>
+          <p>Clear definition of user inputs, outputs, dashboard requirements, scenario comparisons, calculations, and validation needs.</p>
+        </article>
+        <article class="card">
+          <h3>Confidentiality and IP</h3>
+          <p>Identification of patent-related, confidential, restricted, or public-facing content before development and deployment.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="workflow">
+      <div class="section-head">
+        <div>
+          <h2>Request Workflow</h2>
+          <p>Each request moves through submission, review, development, validation, and deployment.</p>
+        </div>
+      </div>
+
+      <div class="workflow">
+        <div class="workflow-step">
+          <div class="workflow-number">1</div>
+          <div>
+            <h3>Request submission</h3>
+            <p>The center director or assigned focal person submits the proposed VirtuaLab request.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-number">2</div>
+          <div>
+            <h3>Initial screening</h3>
+            <p>The request is checked for completeness, scope clarity, technical readiness, and supporting material.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-number">3</div>
+          <div>
+            <h3>Feasibility review</h3>
+            <p>The coordination team reviews technical feasibility, confidentiality requirements, expected impact, and development effort.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-number">4</div>
+          <div>
+            <h3>Prototype development</h3>
+            <p>Approved requests are developed into interactive prototypes for review by the submitting center.</p>
+          </div>
+        </div>
+        <div class="workflow-step">
+          <div class="workflow-number">5</div>
+          <div>
+            <h3>Validation and deployment</h3>
+            <p>The center validates the prototype before final deployment as part of the QEERI VirtuaLab ecosystem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="submit">
+      <div class="submit-panel">
+        <div>
+          <h2>Submit a VirtuaLab Request</h2>
+          <p>
+            Use the request form to provide the project background, problem statement, available technical material, required inputs and outputs, expected impact, and confidentiality considerations.
+          </p>
+
+          <ul class="checklist">
+            <li><span class="check">✓</span><span>Confirm the proposed VirtuaLab is one of the center’s priority requests.</span></li>
+            <li><span class="check">✓</span><span>Prepare the problem statement, objectives, and target users.</span></li>
+            <li><span class="check">✓</span><span>List available models, data, equations, code, reports, or publications.</span></li>
+            <li><span class="check">✓</span><span>Define expected user inputs, outputs, features, and validation references.</span></li>
+            <li><span class="check">✓</span><span>Identify any IP, patent, confidentiality, or public-release restrictions.</span></li>
+          </ul>
+        </div>
+
+        <aside class="submit-box">
+          <h3>Ready to submit?</h3>
+          <p>The form will open in a secure Microsoft Forms page.</p>
+          <a class="button button-primary" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=cqTcDnEL5kaWxwpowQ3JLhpgmNLYMUBNjTmkBgiRKGZUNzBJNlNaR1FXSDRITVhYWVc1RVFJVU9UTy4u" target="_blank" rel="noopener">Open Request Form</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head">
+        <div>
+          <h2>Frequently Asked Questions</h2>
+          <p>Key points for center directors and focal persons.</p>
+        </div>
+      </div>
+
+      <details>
+        <summary>Who should submit a request?</summary>
+        <p>Requests should be submitted by the center director or an assigned focal person who can provide technical details and coordinate validation.</p>
+      </details>
+
+      <details>
+        <summary>How many VirtuaLabs can each center nominate?</summary>
+        <p>Each center may initially nominate up to two priority VirtuaLabs to keep the intake process focused and manageable.</p>
+      </details>
+
+      <details>
+        <summary>Will every request be developed?</summary>
+        <p>Requests will be reviewed for completeness, technical readiness, feasibility, confidentiality, and expected value before development begins.</p>
+      </details>
+
+      <details>
+        <summary>Can confidential or patent-related tools be submitted?</summary>
+        <p>Yes. Any confidential, restricted, or patent-related content should be clearly identified in the request form for appropriate review before deployment.</p>
+      </details>
+
+      <details>
+        <summary>What happens after submission?</summary>
+        <p>The request will be reviewed by the QEERI VirtuaLab coordination team. The submitting focal person may be contacted for clarification, validation material, or prototype review.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    QEERI VirtuaLab Request Portal
+  </footer>
+</body>
+</html>
